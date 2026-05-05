@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+    integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <title>Document</title>
+</head>
+
+<body>
+
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Grand+Hotel&display=swap');
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: transparent;
+    }
+
+    .ig-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 580px;
+      padding: 2rem 1rem;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    .ig-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      max-width: 350px;
+    }
+
+    .ig-card {
+      background: #fff;
+      border: 1px solid #dbdbdb;
+      border-radius: 3px;
+      padding: 36px 40px 24px;
+      width: 100%;
+    }
+
+    .ig-logo {
+      font-family: 'Grand Hotel', cursive, serif;
+      font-size: 40px;
+      background: linear-gradient(45deg, #f9ce34, #ee2a7b, #6228d7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-align: center;
+      margin-bottom: 24px;
+      display: block;
+    }
+
+    .ig-input {
+      width: 100%;
+      background: #fafafa;
+      border: 1px solid #dbdbdb;
+      border-radius: 3px;
+      padding: 9px 8px 7px;
+      font-size: 12px;
+      color: #262626;
+      outline: none;
+      margin-bottom: 6px;
+      transition: border 0.15s;
+    }
+
+    .ig-input:focus {
+      border-color: #a8a8a8;
+      background: #fff;
+    }
+
+    .ig-input::placeholder {
+      color: #999;
+      font-size: 12px;
+    }
+
+    .ig-btn {
+      width: 100%;
+      background: #0095f6;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: opacity 0.15s;
+    }
+
+    .ig-btn:hover {
+      opacity: 0.85;
+    }
+
+    .ig-btn:active {
+      opacity: 0.7;
+    }
+
+    .or-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 16px 0 12px;
+    }
+
+    .or-line {
+      flex: 1;
+      height: 1px;
+      background: #dbdbdb;
+    }
+
+    .or-text {
+      font-size: 13px;
+      font-weight: 600;
+      color: #737373;
+    }
+
+    .fb-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: #385185;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      background: none;
+      width: 100%;
+      padding: 8px;
+    }
+
+    .fb-btn:hover {
+      opacity: 0.75;
+    }
+
+    .fb-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    .forgot {
+      display: block;
+      text-align: center;
+      font-size: 12px;
+      color: #00376b;
+      margin-top: 14px;
+      cursor: pointer;
+    }
+
+    .ig-signup-card {
+      background: #fff;
+      border: 1px solid #dbdbdb;
+      border-radius: 3px;
+      padding: 18px;
+      width: 100%;
+      text-align: center;
+      font-size: 14px;
+      color: #262626;
+    }
+
+    .ig-signup-card a {
+      color: #0095f6;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .ig-app {
+      text-align: center;
+      font-size: 13px;
+      color: #262626;
+      margin-top: 10px;
+    }
+
+    .ig-app p {
+      margin-bottom: 10px;
+    }
+
+    .store-row {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .store-btn {
+      border: 1px solid #262626;
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #262626;
+      cursor: pointer;
+      background: none;
+    }
+
+    .store-btn:hover {
+      background: #f0f0f0;
+    }
+
+    .ig-toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(60px);
+      background: #333;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      opacity: 0;
+      transition: all 0.3s;
+      white-space: nowrap;
+      z-index: 99;
+    }
+
+    .ig-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+
+  <div class="ig-wrap">
+    <div class="ig-col">
+      <div class="ig-card">
+        <span class="ig-logo">
+          <img
+            src="data:image/png;base64,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"
+            alt="">
+        </span>
+
+        <input class="ig-input" type="text" id="ig-user" placeholder="Telefon raqami, foydalanuvchi nomi yoki email" />
+        <div style="position:relative;">
+          <input class="ig-input" type="password" id="ig-pass" placeholder="Parol" style="padding-right: 52px;" />
+          <button onclick="togglePass()"
+            style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;font-size:13px;font-weight:600;color:#262626;cursor:pointer;"
+            id="show-btn">Ko'rish</button>
+        </div>
+
+        <button id="btn" class="ig-btn">Kirish</button>
+
+        <div class="or-row">
+          <div class="or-line"></div>
+          <span class="or-text">yoki</span>
+          <div class="or-line"></div>
+        </div>
+
+        <button class="fb-btn" onclick="showToast('Facebook orqali kirish tanlandi')">
+          <svg class="fb-icon" viewBox="0 0 24 24" fill="#385185">
+            <path
+              d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+          </svg>
+          Facebook orqali kirish
+        </button>
+
+        <span class="forgot" onclick="showToast('Parol tiklash havolasi yuborildi')">Parolni unutdingizmi?</span>
+      </div>
+
+      <div class="ig-signup-card">
+        Akkauntingiz yo'qmi? <a onclick="showToast('Ro\'yxatdan o\'tish sahifasiga o\'tildi')">Ro'yxatdan o'ting</a>
+      </div>
+
+      <div class="ig-app">
+        <p style="color:#262626; font-size:13px;">Ilovani yuklab oling</p>
+        <div class="store-row">
+          <button class="store-btn" onclick="showToast('App Store ga yo\'naltirilmoqda')">
+            <i class="fa-brands fa-app-store-ios"></i>
+            App Store
+          </button>
+          <button class="store-btn" onclick="showToast('Google Play ga yo\'naltirilmoqda')">
+            <i class="fa-brands fa-google-play"></i>
+            Google Play
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ig-toast" id="toast"></div>
+
+  <script src="./main.js"></script>
+
+
+</body>
+
+</html>
